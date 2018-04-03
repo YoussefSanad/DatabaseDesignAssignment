@@ -25,6 +25,11 @@ public class Main {
         creator.printMap();
         creator.createClosure();
         creator.printMap();
+        
+        creator.findCandidateKeys();
+        System.out.println("Canditate keys = " + creator.getCandidateKeys());
+        System.out.println("Primary Key = " + creator.getPrimayKey());
+        
     }
     
 }

@@ -27,12 +27,16 @@ public class MultiMap {
         if (dependants == null)
         {
             dependants = new ArrayList<>();
-            dependants.add(value);
+            for(int i = 0; i < value.length(); i++){
+                dependants.add("" + value.charAt(i));
+            }
             this.map.put(key, dependants); 
         }
         else
         {
-            dependants.add(value);
+            for(int i = 0; i < value.length(); i++){
+                dependants.add("" + value.charAt(i));
+            }
         }      
     }
     
