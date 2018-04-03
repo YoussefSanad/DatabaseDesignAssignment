@@ -1,4 +1,4 @@
-A-B
-B-C
-D-AC
-EA-B
+AB-C
+B-D
+C-E
+D-A

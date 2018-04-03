@@ -51,56 +51,56 @@ public class ClosureCreator {
             }
         }
     }
-    
-    public void createClosure()
-    {   
-        //loadDependancies();
-        // VC stands for Values Count
-        HashMap<String,Integer> dependanciesVCBefore = new HashMap<>();
-       
-       DEPENDANCY_MAP.map.forEach((determinant, values) -> {
-            dependanciesVCBefore.put(determinant,values.size() );
-        });
-       
+    private HashMap<String,Integer> getMappedValuesCount(){
+        HashMap<String,Integer> valueCount = new HashMap<>();
         DEPENDANCY_MAP.map.forEach((determinant, values) -> {
-        
-        ArrayList<String> tempValues = new ArrayList<>();
-    
-        Iterator<String> iter = values.iterator();
-        while(iter.hasNext())
-        {
-            
-            String str = iter.next();
-            System.out.println(str);
-            if(DEPENDANCY_MAP.map.containsKey(str))
-            {
-                tempValues.addAll(DEPENDANCY_MAP.map.get(str));
-            }
-        }
-        
-        DEPENDANCY_MAP.addValues(determinant, tempValues);
-
+            valueCount.put(determinant,values.size() );
         });
-
-
+        return valueCount;
+    }
+    
+    private void applyInferenceRules(){
+        DEPENDANCY_MAP.map.forEach((determinant, values) -> {
+            ArrayList<String> tempValues = new ArrayList<>();
+            Iterator<String> iter = values.iterator();
+            while(iter.hasNext())
+            {
+                String str = iter.next();
+                System.out.println(str);
+                if(DEPENDANCY_MAP.map.containsKey(str))
+                {
+                    tempValues.addAll(DEPENDANCY_MAP.map.get(str));
+                }
+            }
+            DEPENDANCY_MAP.addValues(determinant, tempValues);
+        });
+    }
+    
+    private void removeDuplicates(){
         DEPENDANCY_MAP.map.forEach((determinant, values) -> {
            Set<String> removeDuplictes = new HashSet<>();
            removeDuplictes.addAll(values);
            values.clear();
            values.addAll(removeDuplictes);
         });
-
-
-    HashMap<String,Integer> dependanciesVCAfter = new HashMap<>();
-    boolean isSame = true;
-    DEPENDANCY_MAP.map.forEach((determinant, values) -> {
+    }
+    
+    private void checkBaseCase(HashMap<String,Integer> dependanciesVCBefore){
+        HashMap<String,Integer> dependanciesVCAfter = getMappedValuesCount();
+        DEPENDANCY_MAP.map.forEach((determinant, values) -> {
             dependanciesVCAfter.put(determinant,values.size() );
             if(dependanciesVCBefore.get(determinant) != dependanciesVCAfter.get(determinant))
             {
                 createClosure();
             }
         });
-  
+    }
+    public void createClosure(){
+        //value conuts could be done wihtout a map ... for later if there's time
+        HashMap<String,Integer> dependantsValueCount = getMappedValuesCount();
+        applyInferenceRules();
+        removeDuplicates();
+        checkBaseCase(dependantsValueCount);
     }
     
     public void printMap(){
